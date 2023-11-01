@@ -40,7 +40,7 @@ class LancamentoController extends Controller
             'data' => $request->data
         ]);
         return response()->json($this->lancamento, 201);*/
-        return 'cheguei';
+        return 'cheguei até aqui';
     }
 
     /**

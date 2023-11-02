@@ -10,6 +10,8 @@ import Login from './components/Login.vue';
 import Home from './components/Home.vue';
 import Lancamento from './components/Lancamento.vue';
 import Table from './components/Table.vue';
+import InputContainer from './components/InputContainer.vue';
+import Card from './components/Card.vue';
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -24,6 +26,9 @@ app.component('login-component', Login);
 app.component('home-component', Home);
 app.component('lancamento-component', Lancamento);
 app.component('table-component', Table);
+app.component('input-container-component', InputContainer);
+app.component('card-component', Card);
+
 
 /**
  * The following block of code may be used to automatically register your

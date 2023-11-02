@@ -25,6 +25,7 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function (){
     Route::post('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('lancamento',LancamentoController::class);
+
 });
 
 Route::post('login', [AuthController::class, 'login']);

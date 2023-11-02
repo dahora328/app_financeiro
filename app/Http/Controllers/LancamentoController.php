@@ -69,16 +69,52 @@ class LancamentoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Lancamento $lancamento)
+    public function update(Request $request, $id)
     {
-        //
+
+        $lancamento = $this->lancamento->find($id);
+
+        if($lancamento === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
+        }
+
+        if($request->method() === 'PATCH') {
+
+
+            $regrasDinamicas = array();
+
+            //percorrendo todas as regras definidas no Model
+            foreach($this->lancamento->rules() as $input => $regra) {
+
+                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if(array_key_exists($input, $request->all())) {
+                    $regrasDinamicas[$input] = $regra;
+                }
+            }
+
+            $request->validate($regrasDinamicas);
+
+        } else {
+            $request->validate($this->lancamento->rules(), $this->lancamento->feedback());
+        }
+
+        $lancamento->fill($request->all());
+        $lancamento->save();
+
+        return response()->json($lancamento, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lancamento $lancamento)
+    public function destroy($id)
     {
-        //
+        $lancamento = $this->lancamento->find($id);
+
+        if ($lancamento == null){
+            return response()->json(['erro' => 'Impossível realizar a exclusão. O recurso solicitado não existe'], 404);
+        }
+        $lancamento->delete();
+        return response()->json(['msg' => 'O lancamento foi removido com sucesso!'], 200);
     }
 }

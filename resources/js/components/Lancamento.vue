@@ -39,35 +39,81 @@
         <modal-component id="modalLancamento" titulo="Adicionar lançamento">
             <template v-slot:conteudo>
                 <div class="form-group">
-                    <input-container-component titulo="Descricao" id="novaDescricao" id-help="novaDescricaoHelp" texto-ajuda="Informe a descrição.">
-                        <input type="text" class="form-control" id="novaDescricao" aria-describedby="novaDescricaoHelp" placeholder="Descrição">
+                    <input-container-component titulo="Descrição" id="novaDescricao" id-help="novaDescricaoHelp" texto-ajuda="Informe a descrição.">
+                        <input type="text" class="form-control" id="novaDescricao" aria-describedby="novaDescricaoHelp" placeholder="Descrição" v-model="descricaoLancamento">
                     </input-container-component>
+                    {{descricaoLancamento}}
                 </div>
                 <div class="form-group">
-                    <input-container-component titulo="Valor" id="novoDescricao" id-help="novoValorHelp" texto-ajuda="Informe o valor.">
-                        <input type="text" class="form-control" id="inputValor" aria-describedby="novoValorHelp" placeholder="Valor">
+                    <input-container-component titulo="Valor" id="novoValor" id-help="novoValorHelp" texto-ajuda="Informe o valor.">
+                        <input type="text" class="form-control" id="novoValor" aria-describedby="novoValorHelp" placeholder="Valor" v-model="valorLancamento">
                     </input-container-component>
+                    {{valorLancamento}}
                 </div>
                 <div class="form-group">
                     <input-container-component titulo="Data de vencimento" id="novaDataVencimento" id-help="novaDataVencimentohelp" texto-ajuda="Informe a data de vencimento.">
-                        <input type="date" class="form-control" id="inputDataVencimento" aria-describedby="novaDataVencimentohelp" placeholder="Data de vencimento">
+                        <input type="date" class="form-control" id="novaDataVencimento" aria-describedby="novaDataVencimentohelp" placeholder="Data de vencimento" v-model="dataVencimentoLancamento">
                     </input-container-component>
+                    {{dataVencimentoLancamento}}
                 </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
     </div>
 </template>
 
 <script>
+    export default {
+        data(){
+            return{
+                urlBase: 'http://localhost/api/v1/lancamento',
+                descricaoLancamento: '',
+                valorLancamento: '',
+                dataVencimentoLancamento: '',
+            }
+        },
+        computed:{
+            token(){
+                let token = document.cookie.split(';').find(indice => {
+                    return indice.includes('token=')
+                })
 
-import {defineComponent} from "vue";
-import InputContainerComponent from "@/components/InputContainer.vue";
+                token = token.split('=')[1] //retorna indice 1 do array ontem tem o token
+                token = 'Bearer ' + token
+                console.log(token)
+                return token
+            }
+        },
+        methods: {
+            salvar(){
+                console.log(this.descricaoLancamento, this.valorLancamento, this.dataVencimentoLancamento)
 
-export default defineComponent({
-    components: {InputContainerComponent}
-})
+                let formData = new FormData();
+
+                formData.append('descricao', this.descricaoLancamento)
+                formData.append('valor', this.valorLancamento)
+                formData.append('data', this.dataVencimentoLancamento)
+
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', //form tipo equivalente ao  form-data do postman
+                        'Accept': 'application/json', //sempre o retorno vai ser um Json
+                        'Authorization': this.token
+                    }
+                }
+                console.log(this.urlBase, formData, config)
+                axios.post(this.urlBase, formData, config)
+                    .then(response => {
+                        console.log(response)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            }
+        }
+
+    }
 </script>

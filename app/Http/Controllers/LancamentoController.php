@@ -16,7 +16,8 @@ class LancamentoController extends Controller
      */
     public function index()
     {
-        return view('lancamento');
+        $lancamento = Lancamento::all();
+        return $lancamento;
     }
 
     /**
@@ -32,21 +33,23 @@ class LancamentoController extends Controller
      */
     public function store(Request $request)
     {
-        /*$request->validate($this->lancamento->rules());
+        //dd($request->all());
+        $request->validate($this->lancamento->rules(), $this->lancamento->feedback());
 
         $lancamento = $this->lancamento->create([
-            'descricao' => $request->lancamento,
+            'descricao' => $request->descricao,
             'valor' => $request->valor,
             'data' => $request->data
         ]);
-        return response()->json($this->lancamento, 201);*/
-        return 'cheguei até aqui';
+
+        return response()->json($lancamento, 201);
+        //return 'cheguei até aqui';
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Lancamento $id)
+    public function show($id)
     {
         $lancamento = $this->lancamento->find($id);
         if($lancamento == null){

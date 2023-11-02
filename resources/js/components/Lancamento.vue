@@ -30,12 +30,35 @@
                         <table-component></table-component>
                     </template>
                     <template v-slot:rodape>
-                        <button type="button" class="btn btn-primary btn-sm me-md-2">Adicionar</button>
+                        <button type="button" class="btn btn-primary btn-sm me-md-2" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
                     </template>
                 </card-component>
                 <!--Fim do card de listagem dos lançamentos-->
             </div>
         </div>
+        <modal-component id="modalLancamento" titulo="Adicionar lançamento">
+            <template v-slot:conteudo>
+                <div class="form-group">
+                    <input-container-component titulo="Descricao" id="novaDescricao" id-help="novaDescricaoHelp" texto-ajuda="Informe a descrição.">
+                        <input type="text" class="form-control" id="novaDescricao" aria-describedby="novaDescricaoHelp" placeholder="Descrição">
+                    </input-container-component>
+                </div>
+                <div class="form-group">
+                    <input-container-component titulo="Valor" id="novoDescricao" id-help="novoValorHelp" texto-ajuda="Informe o valor.">
+                        <input type="text" class="form-control" id="inputValor" aria-describedby="novoValorHelp" placeholder="Valor">
+                    </input-container-component>
+                </div>
+                <div class="form-group">
+                    <input-container-component titulo="Data de vencimento" id="novaDataVencimento" id-help="novaDataVencimentohelp" texto-ajuda="Informe a data de vencimento.">
+                        <input type="date" class="form-control" id="inputDataVencimento" aria-describedby="novaDataVencimentohelp" placeholder="Data de vencimento">
+                    </input-container-component>
+                </div>
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Salvar</button>
+            </template>
+        </modal-component>
     </div>
 </template>
 

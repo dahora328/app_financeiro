@@ -23,4 +23,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/lancamento', [LancamentoController::class, 'index'])->name('lancamento')->middleware('auth');
+Route::get('/lancamento', function (){
+    return view('app.lancamento');
+})->name('lancamento')->middleware('auth');

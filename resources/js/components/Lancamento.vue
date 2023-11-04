@@ -26,6 +26,7 @@
 
                 <!--Inicio do card de listagem dos lançamentos-->
                 <card-component titulo="Relação de lançamentos">
+
                     <template v-slot:conteudo>
                         <table-component></table-component>
                     </template>
@@ -36,7 +37,12 @@
                 <!--Fim do card de listagem dos lançamentos-->
             </div>
         </div>
+        <!--Início do card de adiconar lançamentos-->
         <modal-component id="modalLancamento" titulo="Adicionar lançamento">
+            <template v-slot:alertas>
+                <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Cadastro realizado com sucesso" v-if="transacaoStatus == 'adicionado'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar o lançamento" v-if="transacaoStatus == 'erro'"></alert-component>
+            </template>
             <template v-slot:conteudo>
                 <div class="form-group">
                     <input-container-component titulo="Descrição" id="novaDescricao" id-help="novaDescricaoHelp" texto-ajuda="Informe a descrição.">
@@ -62,6 +68,7 @@
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
+        <!--Fim do card de adiconar lançamentos-->
     </div>
 </template>
 
@@ -73,6 +80,8 @@
                 descricaoLancamento: '',
                 valorLancamento: '',
                 dataVencimentoLancamento: '',
+                transacaoStatus: '',
+                transacaoDetalhes: []
             }
         },
         computed:{
@@ -108,9 +117,13 @@
                 axios.post(this.urlBase, formData, config)
                     .then(response => {
                         console.log(response)
+                        this.transacaoStatus = 'adicionado'
+                        this.transacaoDetalhes = response.data.id
                     })
                     .catch(errors => {
-                        console.log(errors)
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes = errors.response
+                        //console.log(errors.response.data.message)
                     })
             }
         }

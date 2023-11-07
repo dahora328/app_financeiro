@@ -28,7 +28,7 @@
                 <card-component titulo="Relação de lançamentos">
 
                     <template v-slot:conteudo>
-                        <table-component></table-component>
+                        <table-component :titulos="['ID', 'Descrição', 'Valor', 'Data Vencimento']" :dados="lancamentos"></table-component>
                     </template>
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-primary btn-sm me-md-2" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         data(){
             return{
@@ -81,7 +83,8 @@
                 valorLancamento: '',
                 dataVencimentoLancamento: '',
                 transacaoStatus: '',
-                transacaoDetalhes: []
+                transacaoDetalhes: {},
+                lancamentos: []
             }
         },
         computed:{
@@ -92,11 +95,25 @@
 
                 token = token.split('=')[1] //retorna indice 1 do array ontem tem o token
                 token = 'Bearer ' + token
-                console.log(token)
                 return token
             }
         },
         methods: {
+            carregarLsita(){
+                let config = {
+                    headers: {
+                        'Accept': 'application/json', //sempre o retorno vai ser um Json
+                        'Authorization': this.token
+                    }
+                }
+                axios.get(this.urlBase, config)
+                    .then(response => {
+                        this.lancamentos = response.data
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            },
             salvar(){
                 console.log(this.descricaoLancamento, this.valorLancamento, this.dataVencimentoLancamento)
 
@@ -116,16 +133,23 @@
                 console.log(this.urlBase, formData, config)
                 axios.post(this.urlBase, formData, config)
                     .then(response => {
-                        console.log(response)
                         this.transacaoStatus = 'adicionado'
-                        this.transacaoDetalhes = response.data.id
+                        this.transacaoDetalhes = {
+                            mensagem: 'ID do registro: ' + response.data.id
+                        }
                     })
                     .catch(errors => {
                         this.transacaoStatus = 'erro'
-                        this.transacaoDetalhes = errors.response
-                        //console.log(errors.response.data.message)
+                        this.transacaoDetalhes = {
+                            mensagem: errors.response.data.message,
+                            dados: errors.response.data.errors
+                        }
+
                     })
             }
+        },
+        mounted() {
+            this.carregarLsita()
         }
 
     }

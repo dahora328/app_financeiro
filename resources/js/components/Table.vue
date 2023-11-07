@@ -1,25 +1,24 @@
 <template>
     <div>
         <table class="table table-hover">
+
             <thead>
             <tr>
-                <th scope="col"></th>
-                <th></th>
+                <th scope="col" v-for="titulo, key in titulos" :key="key">{{titulo}}</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td >
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </td>
-                <td>
-                    <button>Vizualizar</button>
-                    <button>Atualizar</button>
-                    <button>Remover</button>
-                </td>
-            </tr>
+                <tr v-for="lancamento in dados" :key="lancamento.id">
+                    <th scope="row">{{lancamento.id}}</th>
+                    <td>{{lancamento.descricao}}</td>
+                    <td>{{lancamento.valor}}</td>
+                    <td>{{lancamento.data}}</td>
+                    <td>
+                        <button>Vizualizar</button>
+                        <button>Atualizar</button>
+                        <button>Remover</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

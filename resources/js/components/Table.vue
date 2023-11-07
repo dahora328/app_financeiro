@@ -1,22 +1,17 @@
 <template>
     <div>
         <table class="table table-hover">
-
             <thead>
             <tr>
-                <th scope="col" v-for="titulo, key in titulos" :key="key">{{titulo}}</th>
+                <th scope="col" v-for="titulo, key in titulos" :key="key">{{titulo.titulo}}</th>
             </tr>
             </thead>
             <tbody>
-                <tr v-for="lancamento in dados" :key="lancamento.id">
-                    <th scope="row">{{lancamento.id}}</th>
-                    <td>{{lancamento.descricao}}</td>
-                    <td>{{lancamento.valor}}</td>
-                    <td>{{lancamento.data}}</td>
-                    <td>
-                        <button>Vizualizar</button>
-                        <button>Atualizar</button>
-                        <button>Remover</button>
+                <tr v-for="obj, chave in dadosFiltrados" :key="chave">
+                    <td v-for="valor, chaveValor in obj" :key="chaveValor">
+                        <span v-if="titulos[chaveValor].tipo == 'texto'">{{valor}}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'float'">{{valor}}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'data'">{{valor}}</span>
                     </td>
                 </tr>
             </tbody>
@@ -30,5 +25,23 @@
 <script>
     export default {
         props: ['dados', 'titulos', 'atualizar', 'remover', 'vizualizar'],
+        computed: {
+            dadosFiltrados(){
+                let campos = Object.keys(this.titulos)
+                let dadosFiltrados = []
+
+                this.dados.map((item, chave) =>{
+                    console.log(chave, item)
+
+                    let itemFiltrado = {}
+                    campos.forEach(campo => {
+                        itemFiltrado[campo] = item[campo]
+                    })
+                    dadosFiltrados.push(itemFiltrado)
+                })
+
+                return dadosFiltrados //retorna um array de objetos
+            }
+        }
     }
 </script>

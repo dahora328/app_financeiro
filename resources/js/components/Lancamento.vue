@@ -28,7 +28,13 @@
                 <card-component titulo="Relação de lançamentos">
 
                     <template v-slot:conteudo>
-                        <table-component :titulos="['ID', 'Descrição', 'Valor', 'Data Vencimento']" :dados="lancamentos"></table-component>
+                        <table-component :titulos="{
+                            id: {titulo: 'ID', tipo: 'texto'},
+                            descricao:{titulo: 'Descrição', tipo: 'texto'},
+                            valor: {titulo: 'Valor', tipo: 'float'},
+                            data: {titulo: 'Data Vencimento', tipo: 'data'},
+
+                        }" :dados="lancamentos"></table-component>
                     </template>
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-primary btn-sm me-md-2" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
@@ -74,6 +80,7 @@
 
 <script>
     import axios from "axios";
+    import {text} from "ionicons/icons";
 
     export default {
         data(){
@@ -99,6 +106,9 @@
             }
         },
         methods: {
+            text() {
+                return text
+            },
             carregarLsita(){
                 let config = {
                     headers: {

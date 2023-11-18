@@ -27,11 +27,12 @@
         props: ['dados', 'titulos', 'atualizar', 'remover', 'vizualizar'],
         computed: {
             dadosFiltrados(){
+
                 let campos = Object.keys(this.titulos)
                 let dadosFiltrados = []
 
                 this.dados.map((item, chave) =>{
-                    console.log(chave, item)
+
 
                     let itemFiltrado = {}
                     campos.forEach(campo => {

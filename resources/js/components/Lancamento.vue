@@ -28,13 +28,14 @@
                 <card-component titulo="Relação de lançamentos">
 
                     <template v-slot:conteudo>
-                        <table-component :titulos="{
+                        <table-component
+                            :titulos="{
                             id: {titulo: 'ID', tipo: 'texto'},
                             descricao:{titulo: 'Descrição', tipo: 'texto'},
                             valor: {titulo: 'Valor', tipo: 'float'},
                             data: {titulo: 'Data Vencimento', tipo: 'data'},
 
-                        }" :dados="lancamentos"></table-component>
+                        }" :dados="lancamentos.data"></table-component>
                     </template>
                     <template v-slot:rodape>
                         <button type="button" class="btn btn-primary btn-sm me-md-2" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
@@ -91,7 +92,7 @@
                 dataVencimentoLancamento: '',
                 transacaoStatus: '',
                 transacaoDetalhes: {},
-                lancamentos: []
+                lancamentos: { data: [] }
             }
         },
         computed:{
@@ -106,9 +107,6 @@
             }
         },
         methods: {
-            text() {
-                return text
-            },
             carregarLsita(){
                 let config = {
                     headers: {

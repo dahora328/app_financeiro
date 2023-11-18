@@ -33,7 +33,7 @@ class LancamentoController extends Controller
         }
 
 
-        return response()->json($lancamentoRepository->getResultadoPaginadoInidio(3), 200);
+        return response()->json($lancamentoRepository->getResultadoPaginado(3), 200);
     }
 
     /**

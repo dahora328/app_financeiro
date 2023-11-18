@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Lancamento;
 use Illuminate\Http\Request;
+use App\Repositories\LancamentoRepository;
 
 class LancamentoController extends Controller
 {
+
+
     protected $lancamento;
     public function __construct(Lancamento $lancamento){
         $this->lancamento = $lancamento;
@@ -14,10 +17,23 @@ class LancamentoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lancamento = Lancamento::all();
-        return $lancamento;
+
+        $lancamentoRepository = new LancamentoRepository($this->lancamento);
+
+        $lancamentos = array();
+
+        if ($request->has('filtro')){
+            $lancamentoRepository->filtro($request->filtro);
+        }
+
+        if($request->has('atributos')){
+            $lancamentoRepository->selectAtributos($request->atributos);
+        }
+
+
+        return response()->json($lancamentoRepository->getResultado(), 200);
     }
 
     /**

@@ -38,7 +38,21 @@
                         }" :dados="lancamentos.data"></table-component>
                     </template>
                     <template v-slot:rodape>
-                        <button type="button" class="btn btn-primary btn-sm me-md-2" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
+
+                        <div class="col">
+                            <paginate-componet>
+
+                                <li v-for="objPagina, key in lancamentos.links" :key="key" :class="objPagina.active ? 'page-item active' : 'page-item'" @click="paginacao(objPagina)">
+                                    <a class="page-link" v-html="objPagina.label"></a>
+                                </li>
+                            </paginate-componet>
+                        </div>
+
+
+                        <div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
+                        </div>
+
                     </template>
                 </card-component>
                 <!--Fim do card de listagem dos lançamentos-->
@@ -107,6 +121,12 @@
             }
         },
         methods: {
+            paginacao(objPagina){
+                if(objPagina.url){
+                    this.urlBase = objPagina.url //ajustando a url com parametro de paginação
+                    this.carregarLsita()
+                }
+            },
             carregarLsita(){
                 let config = {
                     headers: {

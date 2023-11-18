@@ -14,6 +14,7 @@ import InputContainer from './components/InputContainer.vue';
 import Card from './components/Card.vue';
 import Modal from './components/Modal.vue';
 import Alert from './components/Alert.vue';
+import Paginate from "./components/Paginate.vue";
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -32,6 +33,8 @@ app.component('input-container-component', InputContainer);
 app.component('card-component', Card);
 app.component('modal-component', Modal);
 app.component('alert-component', Alert);
+app.component('paginate-componet', Paginate);
+
 
 
 

@@ -8,18 +8,18 @@
                         <div class="row g-3">
                             <div class="col mb-3">
                                 <input-container-component titulo="ID" id="inputId" id-help="idHelp" texto-ajuda="Opcional. Informe o ID.">
-                                    <input type="number" class="form-control" id="inputId" aria-describedby="idHelp" placeholder="ID">
+                                    <input type="number" class="form-control" id="inputId" aria-describedby="idHelp" placeholder="ID" v-model="busca.id">
                                 </input-container-component>
                             </div>
                             <div class="col mb-3">
                                 <input-container-component titulo="Descricao" id="inputDescricao" id-help="descricaoHelp" texto-ajuda="Opcional. Informe a descrição.">
-                                    <input type="text" class="form-control" id="inputDescricao" aria-describedby="descricaoHelp" placeholder="Descrição">
+                                    <input type="text" class="form-control" id="inputDescricao" aria-describedby="descricaoHelp" placeholder="Descrição" v-model="busca.descricao">
                                 </input-container-component>
                             </div>
                         </div>
                     </template>
                     <template v-slot:rodape>
-                        <button type="submit" class="btn btn-primary btn-sm me-md-2">Pesquisar</button>
+                        <button type="submit" class="btn btn-primary btn-sm me-md-2" @click="pesquisar()">Pesquisar</button>
                     </template>
                 </card-component>
                 <!--Fim do card de busca-->
@@ -101,12 +101,15 @@
         data(){
             return{
                 urlBase: 'http://localhost/api/v1/lancamento',
+                urlPaginacao: '',
+                urlFiltro: '',
                 descricaoLancamento: '',
                 valorLancamento: '',
                 dataVencimentoLancamento: '',
                 transacaoStatus: '',
                 transacaoDetalhes: {},
-                lancamentos: { data: [] }
+                lancamentos: { data: [] },
+                busca: { id: '', descricao: ''}
             }
         },
         computed:{
@@ -121,20 +124,45 @@
             }
         },
         methods: {
+            pesquisar(){
+
+                let filtro = ''
+
+                for(let chave in this.busca){
+
+                    if(this.busca[chave]){
+
+                        if(filtro !== ''){
+                            filtro += ';'
+                        }
+                        filtro += chave + ':like:' + '%' + this.busca[chave] + '%'
+                    }
+                }
+                if(filtro !== ''){
+                    this.urlPaginacao = 'page=1'
+                    this.urlFiltro = '&filtro=' + filtro
+                }else{
+                    this.urlFiltro = ''
+                }
+                this.carregarLista()
+            },
             paginacao(objPagina){
                 if(objPagina.url){
-                    this.urlBase = objPagina.url //ajustando a url com parametro de paginação
-                    this.carregarLsita()
+                    //this.urlBase = objPagina.url //ajustando a url com parametro de paginação
+                    this.urlPaginacao = objPagina.url.split('?')[1] //pega o indice 1 do array da url
+                    this.carregarLista()
                 }
             },
-            carregarLsita(){
+            carregarLista(){
+                let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
                 let config = {
                     headers: {
                         'Accept': 'application/json', //sempre o retorno vai ser um Json
                         'Authorization': this.token
                     }
                 }
-                axios.get(this.urlBase, config)
+
+                axios.get(url, config)
                     .then(response => {
                         this.lancamentos = response.data
                     })
@@ -177,7 +205,7 @@
             }
         },
         mounted() {
-            this.carregarLsita()
+            this.carregarLista()
         }
 
     }

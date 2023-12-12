@@ -29,6 +29,9 @@
 
                     <template v-slot:conteudo>
                         <table-component
+                            :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoVisualizar'}"
+                            :atualizar="true"
+                            :remover="true"
                             :titulos="{
                             id: {titulo: 'ID', tipo: 'texto'},
                             descricao:{titulo: 'Descrição', tipo: 'texto'},
@@ -87,6 +90,20 @@
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
+            </template>
+        </modal-component>
+        <!--Fim do card de adiconar lançamentos-->
+
+        <!--Inicio do card de vizualização lançamentos-->
+        <modal-component id="modalLancamentoVisualizar" titulo="Visualizar lançamento">
+            <template v-slot:alertas>
+
+            </template>
+            <template v-slot:conteudo>
+                teste
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </template>
         </modal-component>
         <!--Fim do card de adiconar lançamentos-->

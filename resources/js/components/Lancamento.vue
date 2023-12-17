@@ -30,7 +30,7 @@
                     <template v-slot:conteudo>
                         <table-component
                             :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoVisualizar'}"
-                            :atualizar="true"
+                            :atualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoAtualizar'}"
                             :remover="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoRemover'}"
                             :titulos="{
                             id: {titulo: 'ID', tipo: 'texto'},
@@ -119,9 +119,10 @@
         <!--Inicio do modal de remoção lançamentos-->
         <modal-component id="modalLancamentoRemover" titulo="Excluir lançamento">
             <template v-slot:alertas>
-
+                <alert-component tipo="success" titulo="Transacao realizada com sucesso" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'sucesso'"></alert-component>
+                <alert-component tipo="danger" titulo="Erro na transação" :etalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'erro'"></alert-component>
             </template>
-            <template v-slot:conteudo>
+            <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
                 <input-container-component titulo="ID">
                     <input type="text" class="form-control" :value="$store.state.item.id" disabled>
                 </input-container-component>
@@ -130,11 +131,43 @@
                 </input-container-component>
             </template>
             <template v-slot:rodape>
-                <button type="button" class="btn btn-danger" @click="remover()">Remover</button>
+                <button type="button" class="btn btn-danger" @click="remover()" v-if="$store.state.transacao.status != 'sucesso'">Remover</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </template>
         </modal-component>
         <!--Fim do modal de remoção lançamentos-->
+
+        <!--Início do modal de atualização lançamentos-->
+        <modal-component id="modalLancamentoAtualizar" titulo="Atualizar lançamento">
+            <template v-slot:alertas>
+
+            </template>
+            <template v-slot:conteudo>
+                <div class="form-group">
+                    <input-container-component titulo="Descrição" id="atualizarDescricao" id-help="atualizarDescricaoHelp" texto-ajuda="Informe a descrição.">
+                        <input type="text" class="form-control" id="atualizarDescricao" aria-describedby="atualizarDescricaoHelp" placeholder="Descrição" v-model="descricaoLancamento">
+                    </input-container-component>
+
+                </div>
+                <div class="form-group">
+                    <input-container-component titulo="Valor" id="atualizarValor" id-help="atualizarValorHelp" texto-ajuda="Informe o valor.">
+                        <input type="text" class="form-control" id="atualizarValor" aria-describedby="atualizarValorHelp" placeholder="Valor" v-model="valorLancamento">
+                    </input-container-component>
+
+                </div>
+                <div class="form-group">
+                    <input-container-component titulo="Data de vencimento" id="atualizarDataVencimento" id-help="atualizarDataVencimentohelp" texto-ajuda="Informe a data de vencimento.">
+                        <input type="date" class="form-control" id="atualizarDataVencimento" aria-describedby="atualizarDataVencimentohelp" placeholder="Data de vencimento" v-model="dataVencimentoLancamento">
+                    </input-container-component>
+
+                </div>
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
+            </template>
+        </modal-component>
+        <!--Fim do modal de adiconar lançamentos-->
     </div>
 </template>
 
@@ -169,6 +202,9 @@
             }
         },
         methods: {
+            atualizar(){
+                console.log(this.$store.state.item)
+            },
             remover(){
                 let confirmacao = confirm('Deseja realmente remover esse registro?')
 
@@ -189,11 +225,13 @@
                 console.log(url)
                 axios.post(url, formData, config)
                     .then(response => {
-                        console.log('Registro removido com sucesso', response)
+                        this.$store.state.transacao.status = 'sucesso'
+                        this.$store.state.transacao.mensagem = response.data.msg
                         this.carregarLista()
                     })
                     .catch(errors => {
-                        console.log('Houve um erro na tentiva de remoção do registro', errors.response)
+                        this.$store.state.transacao.status = 'erro'
+                        this.$store.state.transacao.mensagem = errors.response.data.erro
                     })
             },
             pesquisar(){

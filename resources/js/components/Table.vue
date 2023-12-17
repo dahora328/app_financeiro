@@ -4,7 +4,7 @@
             <thead>
             <tr>
                 <th scope="col" v-for="titulo, key in titulos" :key="key">{{titulo.titulo}}</th>
-                <th v-if="visualizar.visivel || remover.visivel || atualizar"></th>
+                <th v-if="visualizar.visivel || remover.visivel || atualizar.visivel"></th>
             </tr>
             </thead>
             <tbody>
@@ -14,9 +14,9 @@
                         <span v-if="titulos[chaveValor].tipo == 'float'">{{valor}}</span>
                         <span v-if="titulos[chaveValor].tipo == 'data'">{{valor}}</span>
                     </td>
-                    <td v-if="visualizar.visivel || remover.visivel || atualizar">
+                    <td v-if="visualizar.visivel || remover.visivel || atualizar.visivel">
                         <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget" @click="setStore(obj)">Visualizar</button>
-                        <button v-if="atualizar" class="btn btn-outline-secondary btn-sm">Atualizar</button>
+                        <button v-if="atualizar.visivel" class="btn btn-outline-secondary btn-sm" :data-bs-toggle="atualizar.dataToggle" :data-bs-target="atualizar.dataTarget" @click="setStore(obj)">Atualizar</button>
                         <button v-if="remover.visivel" class="btn btn-outline-danger btn-sm" :data-bs-toggle="remover.dataToggle" :data-bs-target="remover.dataTarget" @click="setStore(obj)">Remover</button>
                     </td>
                 </tr>
@@ -33,6 +33,8 @@
         props: ['dados', 'titulos', 'atualizar', 'remover', 'visualizar'],
         methods: {
             setStore(obj){
+                this.$store.state.transacao.status = ''
+                this.$store.state.transacao.mensagem = ''
                 this.$store.state.item = obj
             }
         },

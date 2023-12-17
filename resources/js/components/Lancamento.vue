@@ -31,7 +31,7 @@
                         <table-component
                             :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoVisualizar'}"
                             :atualizar="true"
-                            :remover="true"
+                            :remover="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoRemover'}"
                             :titulos="{
                             id: {titulo: 'ID', tipo: 'texto'},
                             descricao:{titulo: 'Descrição', tipo: 'texto'},
@@ -61,7 +61,7 @@
                 <!--Fim do card de listagem dos lançamentos-->
             </div>
         </div>
-        <!--Início do card de adiconar lançamentos-->
+        <!--Início do modal de adiconar lançamentos-->
         <modal-component id="modalLancamento" titulo="Adicionar lançamento">
             <template v-slot:alertas>
                 <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Cadastro realizado com sucesso" v-if="transacaoStatus == 'adicionado'"></alert-component>
@@ -92,9 +92,9 @@
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
-        <!--Fim do card de adiconar lançamentos-->
+        <!--Fim do modal de adiconar lançamentos-->
 
-        <!--Inicio do card de vizualização lançamentos-->
+        <!--Inicio do modal de vizualização lançamentos-->
         <modal-component id="modalLancamentoVisualizar" titulo="Visualizar lançamento">
             <template v-slot:alertas>
 
@@ -114,7 +114,27 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </template>
         </modal-component>
-        <!--Fim do card de adiconar lançamentos-->
+        <!--Fim do mocal de vizualização lançamentos-->
+
+        <!--Inicio do modal de remoção lançamentos-->
+        <modal-component id="modalLancamentoRemover" titulo="Excluir lançamento">
+            <template v-slot:alertas>
+
+            </template>
+            <template v-slot:conteudo>
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                </input-container-component>
+                <input-container-component titulo="Descrição">
+                    <input type="text" class="form-control" :value="$store.state.item.descricao" disabled>
+                </input-container-component>
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-danger" @click="remover()">Remover</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!--Fim do modal de remoção lançamentos-->
     </div>
 </template>
 
@@ -149,6 +169,33 @@
             }
         },
         methods: {
+            remover(){
+                let confirmacao = confirm('Deseja realmente remover esse registro?')
+
+                if (!confirmacao){
+                    return false
+                }
+
+                let formData = new FormData();
+                formData.append('_method', 'delete')
+
+                let config = {
+                    headers: 'application/json',
+                    authorization: this.token
+                }
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                console.log(url)
+                axios.post(url, formData, config)
+                    .then(response => {
+                        console.log('Registro removido com sucesso', response)
+                        this.carregarLista()
+                    })
+                    .catch(errors => {
+                        console.log('Houve um erro na tentiva de remoção do registro', errors.response)
+                    })
+            },
             pesquisar(){
 
                 let filtro = ''

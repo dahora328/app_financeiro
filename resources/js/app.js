@@ -21,7 +21,23 @@ import Paginate from "./components/Paginate.vue";
  * to use in your application's views. An example is included for you.
  */
 
+
+
+
+
+
 const app = createApp({});
+
+
+/* Importação e configuração do Vuex */
+
+import { createStore } from 'Vuex'
+const store = createStore({
+    state: {
+        item: {}
+    }
+})
+app.use(store)
 
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);

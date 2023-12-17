@@ -100,7 +100,15 @@
 
             </template>
             <template v-slot:conteudo>
-                teste
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                </input-container-component>
+                <input-container-component titulo="Descrição">
+                    <input type="text" class="form-control" :value="$store.state.item.descricao" disabled>
+                </input-container-component>
+                <input-container-component titulo="Data vencimento">
+                    <input type="text" class="form-control" :value="$store.state.item.data" disabled>
+                </input-container-component>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

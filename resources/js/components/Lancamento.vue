@@ -145,19 +145,19 @@
             <template v-slot:conteudo>
                 <div class="form-group">
                     <input-container-component titulo="Descrição" id="atualizarDescricao" id-help="atualizarDescricaoHelp" texto-ajuda="Informe a descrição.">
-                        <input type="text" class="form-control" id="atualizarDescricao" aria-describedby="atualizarDescricaoHelp" placeholder="Descrição" v-model="descricaoLancamento">
+                        <input type="text" class="form-control" id="atualizarDescricao" aria-describedby="atualizarDescricaoHelp" placeholder="Descrição" v-model="$store.state.item.descricao">
                     </input-container-component>
 
                 </div>
                 <div class="form-group">
                     <input-container-component titulo="Valor" id="atualizarValor" id-help="atualizarValorHelp" texto-ajuda="Informe o valor.">
-                        <input type="text" class="form-control" id="atualizarValor" aria-describedby="atualizarValorHelp" placeholder="Valor" v-model="valorLancamento">
+                        <input type="text" class="form-control" id="atualizarValor" aria-describedby="atualizarValorHelp" placeholder="Valor" v-model="$store.state.item.valor">
                     </input-container-component>
 
                 </div>
                 <div class="form-group">
                     <input-container-component titulo="Data de vencimento" id="atualizarDataVencimento" id-help="atualizarDataVencimentohelp" texto-ajuda="Informe a data de vencimento.">
-                        <input type="date" class="form-control" id="atualizarDataVencimento" aria-describedby="atualizarDataVencimentohelp" placeholder="Data de vencimento" v-model="dataVencimentoLancamento">
+                        <input type="date" class="form-control" id="atualizarDataVencimento" aria-describedby="atualizarDataVencimentohelp" placeholder="Data de vencimento" v-model="$store.state.item.data">
                     </input-container-component>
 
                 </div>
@@ -174,6 +174,7 @@
 <script>
     import axios from "axios";
     import {text} from "ionicons/icons";
+    import data from "bootstrap/js/src/dom/data.js";
 
     export default {
         data(){
@@ -203,7 +204,31 @@
         },
         methods: {
             atualizar(){
-                console.log(this.$store.state.item)
+
+                let formData = new FormData();
+                formData.append('_method', 'patch')
+                formData.append('descricao', this.$store.state.item.descricao)
+                formData.append('valor', this.$store.state.item.valor)
+                formData.append('data', this.$store.state.item.data)
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', //form tipo equivalente ao  form-data do postman
+                        'Accept': 'application/json', //sempre o retorno vai ser um Json
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.post(url, formData, config)
+                    .then(response => {
+                        console.log('Atualizado', response)
+                        this.carregarLista()
+                    })
+                    .catch(errors => {
+                        console.log('Erro na atualização', errors.response)
+                    })
             },
             remover(){
                 let confirmacao = confirm('Deseja realmente remover esse registro?')

@@ -234,6 +234,7 @@
                         this.$store.state.transacao.status = 'erro'
                         this.$store.state.transacao.mensagem = errors.response.data.message
                         this.$store.state.transacao.dados = errors.response.data.errors
+
                     })
             },
             remover(){

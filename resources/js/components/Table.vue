@@ -12,7 +12,7 @@
                     <td v-for="valor, chaveValor in obj" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo == 'texto'">{{valor}}</span>
                         <span v-if="titulos[chaveValor].tipo == 'float'">{{valor}}</span>
-                        <span v-if="titulos[chaveValor].tipo == 'data'">{{valor}}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'data'">{{ $filters.formataDataTempo(valor) }}</span>
                     </td>
                     <td v-if="visualizar.visivel || remover.visivel || atualizar.visivel">
                         <button v-if="visualizar.visivel" class="btn btn-outline-primary btn-sm" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget" @click="setStore(obj)">Visualizar</button>

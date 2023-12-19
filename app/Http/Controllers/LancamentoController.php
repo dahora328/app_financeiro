@@ -94,7 +94,7 @@ class LancamentoController extends Controller
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if($request->method() === 'PATCH') {
+        if($request->method() === 'patch') {
 
 
             $regrasDinamicas = array();

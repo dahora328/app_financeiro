@@ -44,6 +44,22 @@ const store = createStore({
 })
 app.use(store)
 
+
+app.config.globalProperties.$filters = {
+    formataDataTempo(d) {
+        if (!d) return "";
+
+        d = d.split("T")
+        let data = d[0]
+        console.log(data)
+        data = data.split("-")
+        data = data[2] + "/" + data[1] + "/" + data[0];
+
+
+        return data
+    },
+}
+
 import ExampleComponent from './components/ExampleComponent.vue';
 app.component('example-component', ExampleComponent);
 app.component('login-component', Login);

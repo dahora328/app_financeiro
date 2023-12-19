@@ -120,7 +120,7 @@
         <modal-component id="modalLancamentoRemover" titulo="Excluir lançamento">
             <template v-slot:alertas>
                 <alert-component tipo="success" titulo="Transacao realizada com sucesso" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'sucesso'"></alert-component>
-                <alert-component tipo="danger" titulo="Erro na transação" :etalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'erro'"></alert-component>
+                <alert-component tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'erro'"></alert-component>
             </template>
             <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
                 <input-container-component titulo="ID">
@@ -140,7 +140,8 @@
         <!--Início do modal de atualização lançamentos-->
         <modal-component id="modalLancamentoAtualizar" titulo="Atualizar lançamento">
             <template v-slot:alertas>
-
+                <alert-component tipo="success" titulo="Transacao realizada com sucesso" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status === 'sucesso'"></alert-component>
+                <alert-component tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status === 'erro'"></alert-component>
             </template>
             <template v-slot:conteudo>
                 <div class="form-group">
@@ -224,10 +225,15 @@
                 axios.post(url, formData, config)
                     .then(response => {
                         console.log('Atualizado', response)
+                        this.$store.state.transacao.status = 'sucesso'
+                        this.$store.state.transacao.mensagem = 'Registro de lançamento atualizado com sucesso!'
                         this.carregarLista()
                     })
                     .catch(errors => {
                         console.log('Erro na atualização', errors.response)
+                        this.$store.state.transacao.status = 'erro'
+                        this.$store.state.transacao.mensagem = errors.response.data.message
+                        this.$store.state.transacao.dados = errors.response.data.errors
                     })
             },
             remover(){

@@ -115,6 +115,7 @@ class LancamentoController extends Controller
         }
 
         $lancamento->fill($request->all());
+
         $lancamento->save();
 
         return response()->json($lancamento, 200);

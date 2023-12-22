@@ -7,6 +7,7 @@ import 'bootstrap';
  */
 
 import axios from 'axios';
+import config from "bootstrap/js/src/util/config.js";
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -31,3 +32,38 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+//interceptar o request da aplicação
+axios.interceptors.request.use(
+    config =>{
+        //definir para todas as requisições os parãmetros de accept e authorization
+        config.headers.Accept = 'application/json'
+
+        //recuperando o token de autorização do cookies
+        let token = document.cookie.split(';').find(indice => {
+            return indice.includes('token=')
+        })
+
+        token = token.split('=')[1] //retorna indice 1 do array ontem tem o token
+        token = 'Bearer ' + token
+        config.headers.Authorization = token
+
+        console.log('Interceptando o request antes do envio', config)
+        return config
+    },
+    error => {
+        console.log('Erro na requisição: ', error)
+        return Promise.reject(error)
+    }
+)
+
+//Interceptar o response da aplicação
+axios.interceptors.response.use(
+    response =>{
+        console.log('Interceptando o resposta antes do envio', response)
+        return response
+    },
+    error => {
+        console.log('Erro na resposta: ', error)
+        return Promise.reject(error)
+    }
+)

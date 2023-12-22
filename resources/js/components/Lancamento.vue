@@ -41,21 +41,17 @@
                         }" :dados="lancamentos.data"></table-component>
                     </template>
                     <template v-slot:rodape>
-
                         <div class="col">
                             <paginate-componet>
-
                                 <li v-for="objPagina, key in lancamentos.links" :key="key" :class="objPagina.active ? 'page-item active' : 'page-item'" @click="paginacao(objPagina)">
                                     <a class="page-link" v-html="objPagina.label"></a>
                                 </li>
                             </paginate-componet>
                         </div>
 
-
                         <div>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
                         </div>
-
                     </template>
                 </card-component>
                 <!--Fim do card de listagem dos lançamentos-->
@@ -192,17 +188,6 @@
                 busca: { id: '', descricao: ''}
             }
         },
-        computed:{
-            token(){
-                let token = document.cookie.split(';').find(indice => {
-                    return indice.includes('token=')
-                })
-
-                token = token.split('=')[1] //retorna indice 1 do array ontem tem o token
-                token = 'Bearer ' + token
-                return token
-            }
-        },
         methods: {
             atualizar(){
 
@@ -217,8 +202,6 @@
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data', //form tipo equivalente ao  form-data do postman
-                        'Accept': 'application/json', //sempre o retorno vai ser um Json
-                        'Authorization': this.token
                     }
                 }
 
@@ -247,15 +230,9 @@
                 let formData = new FormData();
                 formData.append('_method', 'delete')
 
-                let config = {
-                    headers: 'application/json',
-                    authorization: this.token
-                }
-
                 let url = this.urlBase + '/' + this.$store.state.item.id
 
-                console.log(url)
-                axios.post(url, formData, config)
+                axios.post(url, formData)
                     .then(response => {
                         this.$store.state.transacao.status = 'sucesso'
                         this.$store.state.transacao.mensagem = response.data.msg
@@ -297,14 +274,8 @@
             },
             carregarLista(){
                 let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro
-                let config = {
-                    headers: {
-                        'Accept': 'application/json', //sempre o retorno vai ser um Json
-                        'Authorization': this.token
-                    }
-                }
 
-                axios.get(url, config)
+                axios.get(url)
                     .then(response => {
                         this.lancamentos = response.data
                     })
@@ -324,8 +295,6 @@
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data', //form tipo equivalente ao  form-data do postman
-                        'Accept': 'application/json', //sempre o retorno vai ser um Json
-                        'Authorization': this.token
                     }
                 }
                 console.log(this.urlBase, formData, config)

@@ -21,11 +21,6 @@ import Paginate from "./components/Paginate.vue";
  * to use in your application's views. An example is included for you.
  */
 
-
-
-
-
-
 const app = createApp({});
 
 
@@ -51,10 +46,8 @@ app.config.globalProperties.$filters = {
 
         d = d.split("T")
         let data = d[0]
-        console.log(data)
         data = data.split("-")
         data = data[2] + "/" + data[1] + "/" + data[0];
-
 
         return data
     },

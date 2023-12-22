@@ -33,18 +33,21 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     enabledTransports: ['ws', 'wss'],
 // });
 //interceptar o request da aplicação
+/* Interpectar os requests da aplicação*/
 axios.interceptors.request.use(
-    config =>{
-        //definir para todas as requisições os parãmetros de accept e authorization
-        config.headers.Accept = 'application/json'
+    config => {
+        //definir para todas as requisições os parâmetros de accept e authorization
+        config.headers['Accept'] = 'application/json'
 
-        //recuperando o token de autorização do cookies
+        //recuperando o token de autorização dos cookies
         let token = document.cookie.split(';').find(indice => {
             return indice.includes('token=')
         })
 
-        token = token.split('=')[1] //retorna indice 1 do array ontem tem o token
+        token = token.split('=')[1] //pega indice da posição 1
+
         token = 'Bearer ' + token
+
         config.headers.Authorization = token
 
         console.log('Interceptando o request antes do envio', config)
@@ -56,14 +59,27 @@ axios.interceptors.request.use(
     }
 )
 
-//Interceptar o response da aplicação
+
+/* Interpectar os responses da aplicação*/
 axios.interceptors.response.use(
-    response =>{
-        console.log('Interceptando o resposta antes do envio', response)
+    response => {
+
+        console.log('Interceptando a resposta antes da aplicação', response)
         return response
     },
     error => {
-        console.log('Erro na resposta: ', error)
+        console.log('Erro na resposta: ', error.response)
+        if(error.response.status == 401 && error.response.data.message == 'Token has expired'){
+            console.log('Fazer uma nova requisição para rota refresh')
+            axios.post('http://localhost:80/api/refresh')
+                .then(response => {
+                    console.log('Refresh com sucesso', response)
+                    document.cookie = 'token=' + response.data.token
+                    console.log('Token atualizado: ', response.data.token)
+                    window.location.reload()
+                })
+        }
         return Promise.reject(error)
     }
 )
+

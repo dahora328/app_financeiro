@@ -294,7 +294,7 @@
 
                 let config = {
                     headers: {
-                        'Content-Type': 'multipart/form-data', //form tipo equivalente ao  form-data do postman
+                        'Content-Type': 'multipart/form-data', //form tipo equivalente ao form-data do postman
                     }
                 }
                 console.log(this.urlBase, formData, config)

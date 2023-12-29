@@ -12,6 +12,6 @@
 
 <script>
     export default {
-        props: ['titulo', '']
+        props: ['titulo']
     }
 </script>

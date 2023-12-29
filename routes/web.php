@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LancamentoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,4 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/lancamento', function (){
     return view('app.lancamento');
 })->name('lancamento')->middleware('auth');
+Route::get('/categoria', [CategoriaController::class, 'index'])->name('categoria')->middleware('auth');

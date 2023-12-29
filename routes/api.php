@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LancamentoController;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function (){
     Route::post('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('lancamento',LancamentoController::class);
+    Route::apiResource('categoria',CategoriaController::class);
 
 });
 

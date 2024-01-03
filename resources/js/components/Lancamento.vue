@@ -34,10 +34,10 @@
                             :remover="{visivel: true, dataToggle: 'modal', dataTarget: '#modalLancamentoRemover'}"
                             :titulos="{
                             id: {titulo: 'ID', tipo: 'texto'},
-                            descricao:{titulo: 'Descrição', tipo: 'texto'},
+                            descricao: {titulo: 'Descrição', tipo: 'texto'},
                             valor: {titulo: 'Valor', tipo: 'float'},
                             data: {titulo: 'Data Vencimento', tipo: 'data'},
-
+                            categoria_id: {}
                         }" :dados="lancamentos.data"></table-component>
                     </template>
                     <template v-slot:rodape>
@@ -50,7 +50,6 @@
                         </div>
 
                         <div>
-                            <h5>teste</h5>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLancamento">Adicionar</button>
                         </div>
                     </template>
@@ -106,6 +105,10 @@
                 <input-container-component titulo="Data vencimento">
                     <input type="text" class="form-control" :value="$store.state.item.data" disabled>
                 </input-container-component>
+                <input-container-component titulo="Categoria">
+                    <input type="text" class="form-control" :value="$store.state.item.categoria_id" disabled>
+                </input-container-component>
+
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -171,7 +174,6 @@
 
 <script>
     import axios from "axios";
-    import {text} from "ionicons/icons";
     import data from "bootstrap/js/src/dom/data.js";
 
     export default {
@@ -268,7 +270,7 @@
             },
             paginacao(objPagina){
                 if(objPagina.url){
-                    //this.urlBase = objPagina.url //ajustando a url com parametro de paginação
+                    //this.urlBase = objPagina.url ajustando a url com parametro de paginação
                     this.urlPaginacao = objPagina.url.split('?')[1] //pega o indice 1 do array da url
                     this.carregarLista()
                 }

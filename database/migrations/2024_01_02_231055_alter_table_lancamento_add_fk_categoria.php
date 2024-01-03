@@ -16,9 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('categoria_id');
         });
 
+
         DB::statement('update lancamentos set categoria_id = 1');
 
-        //criando fk e também remover a coluna motivo_contato
+        //criando fk na tabela
         Schema::table('lancamentos', function (Blueprint $table) {
             $table->foreign('categoria_id')->references('id')->on('categoria');
         });

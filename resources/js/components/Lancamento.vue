@@ -82,6 +82,12 @@
                     </input-container-component>
                     {{dataVencimentoLancamento}}
                 </div>
+                <div class="form-group">
+                    <input-container-component titulo="Categoria" id="novaCategoria" id-help="novaCategoriaHelp" texto-ajuda="Informe a categoria.">
+                        <input type="text" class="form-control" id="novaCategoria" aria-describedby="novaCategoriaHelp" placeholder="Categoria" v-model="categoria_id">
+                    </input-container-component>
+                    {{categoria_id}}
+                </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -185,6 +191,7 @@
                 descricaoLancamento: '',
                 valorLancamento: '',
                 dataVencimentoLancamento: '',
+                categoria_id: '',
                 transacaoStatus: '',
                 transacaoDetalhes: {},
                 lancamentos: { data: [] },
@@ -294,6 +301,8 @@
                 formData.append('descricao', this.descricaoLancamento)
                 formData.append('valor', this.valorLancamento)
                 formData.append('data', this.dataVencimentoLancamento)
+                // formData.append('user_id', )
+                formData.append('categoria_id', this.categoria_id)
 
                 let config = {
                     headers: {

@@ -55,7 +55,9 @@ class LancamentoController extends Controller
         $lancamento = $this->lancamento->create([
             'descricao' => $request->descricao,
             'valor' => $request->valor,
-            'data' => $request->data
+            'data' => $request->data,
+            'user_id' => $request->user()->id,
+            'categoria_id' => $request->categoria_id
         ]);
 
         return response()->json($lancamento, 201);

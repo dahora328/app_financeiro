@@ -22,7 +22,6 @@ class CategoriaController extends Controller
 
         $categoria = array();
 
-        //return response()->json($categoriaRepository->getResultado(), 200);
         return view('app\categoria') ;
     }
 

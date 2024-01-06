@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lancamento extends Model
 {
     use HasFactory;
-    protected $fillable = ['descricao','valor', 'data'];
+    protected $fillable = ['descricao','valor', 'data', 'user_id', 'categoria_id'];
 
     public function rules()
     {
@@ -26,8 +26,7 @@ class Lancamento extends Model
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'descricao.min' => 'A descrição deve ter no mínimo 3 caracteres',
-            ''
+            'descricao.min' => 'A descrição deve ter no mínimo 3 caracteres'
         ];
     }
 }

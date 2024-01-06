@@ -17,13 +17,19 @@
             </div>
         </div>
         <!--Início do modal de adiconar lançamentos-->
-        <modal-component id="modalLancamento" titulo="Adicionar lançamento">
+        <modal-component id="modalLancamento" titulo="Adicionar categoria">
             <template v-slot:alertas>
             </template>
             <template v-slot:conteudo>
+                <div class="form-group">
+                    <input-container-component titulo="Nome" id="novoNomeCategoria" id-help="novoNomeCategoriaHelp" texto-ajuda="Informe o nome da categoria.">
+                        <input type="text" class="form-control" id="novoNomeCategoria" aria-describedby="novoNomeCategoriaHelp" placeholder="Nome" v-model="NomeCategoria">
+                    </input-container-component>
+                    {{NomeCategoria}}
+                </div>
             </template>
             <template v-slot:rodape>
-                <button type="button" class="btn btn-secondary">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary">Salvar</button>
             </template>
         </modal-component>
@@ -87,5 +93,20 @@
 </template>
 
 <script>
+    export default {
+        data(){
+            return {
+                urlBase: 'http://localhost/api/v1/categoria',
+                urlFiltro: '',
+                nomeCategoria: '',
+                transacaoStatus: '',
+                transacaoDetalhes: {},
+                lancamentos: { data: [] },
+                busca: { id: '', descricao: ''}
+            }
+        },
+        methods: {
 
+        }
+    }
 </script>

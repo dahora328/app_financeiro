@@ -192,6 +192,7 @@
                 valorLancamento: '',
                 dataVencimentoLancamento: '',
                 categoria_id: '',
+                user_id: '',
                 transacaoStatus: '',
                 transacaoDetalhes: {},
                 lancamentos: { data: [] },
@@ -301,7 +302,6 @@
                 formData.append('descricao', this.descricaoLancamento)
                 formData.append('valor', this.valorLancamento)
                 formData.append('data', this.dataVencimentoLancamento)
-                // formData.append('user_id', )
                 formData.append('categoria_id', this.categoria_id)
 
                 let config = {

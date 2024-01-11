@@ -7,6 +7,12 @@ abstract class AbstractRepository{
     public function __construct(Model $model)
     {
         $this->model =  $model;
+
+        $user = auth('api')->user();
+        if ($user){
+            // Se um usuário estiver autenticado, adicione a condição na query
+            $this->model = $this->model->where('user_id', $user->id);
+        }
     }
 
     public function filtro($filtros)

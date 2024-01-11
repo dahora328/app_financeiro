@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "ionicons": "^7.2.1",
+        "jsonwebtoken": "^9.0.2",
         "vuex": "^4.1.0"
     }
 }
